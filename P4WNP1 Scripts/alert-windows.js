@@ -3,7 +3,7 @@ typingSpeed(20, 20); // Tippgeschwindigkeit (ms)
 
 // 1. URL zu deiner Python-Datei auf GitHub (Raw-Link)
 // Ich füge eine Zufallszahl (?v=...) an, damit Windows nicht eine alte Version aus dem Cache lädt
-var rawUrl = "DEIN_GITHUB_RAW_LINK_HIER"; 
+var rawUrl = "https://raw.githubusercontent.com/heydtjonathan-rgb/py-prank-scripts/refs/heads/main/alert.py"; 
 var cacheBuster = Math.floor(Math.random() * 10000);
 var finalUrl = rawUrl + "?v=" + cacheBuster;
 
