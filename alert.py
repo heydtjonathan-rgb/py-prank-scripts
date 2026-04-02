@@ -4,34 +4,77 @@ import threading
 import time
 import os
 
-# --- EINSTELLUNGEN ---
-DAUER = 60 # Sekunden bis zum Schließen
-TEXT = "SYSTEM KRITISCH - ZUGRIFF VERWEIGERT"
-INFO = "Ihre Hardware wird synchronisiert... Bitte warten."
+# ─── ANPASSBAR ───────────────────────────────────────
+TITEL = "SYSTEM GESPERRT"
+HAUPTTEXT = "ZUGRIFF VERWEIGERT"
+UNTERTEXT = "Sicherheits-Protokoll aktiv..."
+HINTERGRUND = "black"
+TEXTFARBE = "red"
+DAUER_SEKUNDEN = 60
+BILD_PFAD = None       # z.B. "bild.png" oder None
+MUSIK_PFAD = None      # z.B. "alarm.mp3" oder None
+# ─────────────────────────────────────────────────────
 
-def timer(root, label):
-    for i in range(DAUER, -1, -1):
+def beenden():
+    root.destroy()
+
+def starte_musik():
+    if MUSIK_PFAD and os.path.exists(MUSIK_PFAD):
+        try:
+            import pygame
+            pygame.mixer.init()
+            pygame.mixer.music.load(MUSIK_PFAD)
+            pygame.mixer.music.play(-1)
+        except Exception as e:
+            print(f"Musik-Fehler: {e}")
+
+def countdown(label):
+    for i in range(DAUER_SEKUNDEN, -1, -1):
         if not root.winfo_exists(): break
         label.config(text=f"Automatischer Unlock in {i}s")
         time.sleep(1)
-    if root.winfo_exists(): root.destroy()
+    if root.winfo_exists():
+        root.destroy()
 
+# Fenster erstellen
 root = tk.Tk()
 root.attributes("-fullscreen", True, "-topmost", True)
-root.config(bg="black", cursor="none") # Maus unsichtbar
-root.protocol("WM_DELETE_WINDOW", lambda: None) # Unschließbar
+root.configure(bg=HINTERGRUND)
+root.config(cursor="none") # Maus unsichtbar
 
-f1 = font.Font(family="Arial", size=50, weight="bold")
-f2 = font.Font(family="Arial", size=15)
+# --- SPERREN ---
+root.protocol("WM_DELETE_WINDOW", lambda: None) # X-Button / Alt+F4
+root.bind("<Command-q>", lambda e: "break")     # Mac Beenden
+root.bind("<Command-h>", lambda e: "break")     # Mac Verstecken
+root.bind("<Alt-Tab>", lambda e: "break")       # Windows Wechseln
 
-tk.Label(root, text=TEXT, font=f1, fg="red", bg="black").pack(pady=100)
-tk.Label(root, text=INFO, font=f2, fg="white", bg="black").pack()
-lbl = tk.Label(root, text="", font=f2, fg="gray", bg="black")
-lbl.pack(side="bottom", pady=20)
+# Bild (optional)
+if BILD_PFAD and os.path.exists(BILD_PFAD):
+    try:
+        from PIL import Image, ImageTk
+        img = ImageTk.PhotoImage(Image.open(BILD_PFAD).resize((300,300)))
+        tk.Label(root, image=img, bg=HINTERGRUND).pack(pady=20)
+    except: pass
 
-# Notfall-Hinweis (kleingedruckt)
-hinweis = "NOTFALL: [Win] Strg+Alt+Entf -> Task-Manager | [Mac] Cmd+Opt+Esc -> Sofort beenden"
-tk.Label(root, text=hinweis, font=("Arial", 8), fg="#222", bg="black").pack(side="bottom")
+# Texte
+f_gross = font.Font(family="Arial", size=60, weight="bold")
+f_klein = font.Font(family="Arial", size=18)
 
-threading.Thread(target=timer, args=(root, lbl), daemon=True).start()
+tk.Label(root, text=HAUPTTEXT, font=f_gross, fg=TEXTFARBE, bg=HINTERGRUND).pack(pady=100)
+tk.Label(root, text=UNTERTEXT, font=f_klein, fg="white", bg=HINTERGRUND).pack()
+
+timer_lbl = tk.Label(root, text="", font=f_klein, fg="gray", bg=HINTERGRUND)
+timer_lbl.pack(side="bottom", pady=40)
+
+# --- DER VERSTECKTE BUTTON (UNTEN RECHTS) ---
+# Fast schwarz auf schwarz
+exit_btn = tk.Button(root, text="EXIT", command=beenden, 
+                     bg=HINTERGRUND, fg="#0a0a0a", borderwidth=0, 
+                     highlightthickness=0, activebackground="#111")
+exit_btn.place(relx=0.98, rely=0.98, anchor="center")
+
+# Threads starten
+threading.Thread(target=countdown, args=(timer_lbl,), daemon=True).start()
+threading.Thread(target=starte_musik, daemon=True).start()
+
 root.mainloop()
