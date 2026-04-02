@@ -10,7 +10,7 @@ HAUPTTEXT = "ZUGRIFF VERWEIGERT"
 UNTERTEXT = "Sicherheits-Protokoll aktiv..."
 HINTERGRUND = "black"
 TEXTFARBE = "red"
-DAUER_SEKUNDEN = 60
+DAUER_SEKUNDEN = 10
 BILD_PFAD = None       # Pfad zu einem Bild (z.B. "warnung.png")
 MUSIK_PFAD = None      # Pfad zu einer MP3 (z.B. "alarm.mp3")
 # ─────────────────────────────────────────────────────
