@@ -6,7 +6,7 @@ import os
 import sys
 
 # ─── ANPASSBAR (KONFIGURATION) ───────────────────────
-DAUER_SEKUNDEN = 120       # Zeit bis zum automatischen Schließen
+DAUER_SEKUNDEN = "NONE"       # Zeit bis zum automatischen Schließen
 TITEL_OBEN = "SYSTEM ALERT"
 HAUPTTEXT = "ZUGRIFF VERWEIGERT"
 UNTERTEXT = "Sicherheits-Protokoll aktiv..."
