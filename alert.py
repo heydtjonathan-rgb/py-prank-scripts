@@ -3,115 +3,86 @@ from tkinter import font
 import threading
 import time
 import os
+import sys
 
 # ─── ANPASSBAR (KONFIGURATION) ───────────────────────
-TITEL = "SYSTEM GESPERRT"
+DAUER_SEKUNDEN = 120       # Zeit bis zum automatischen Schließen
+TITEL_OBEN = "SYSTEM ALERT"
 HAUPTTEXT = "ZUGRIFF VERWEIGERT"
 UNTERTEXT = "Sicherheits-Protokoll aktiv..."
 HINTERGRUND = "black"
 TEXTFARBE = "red"
-DAUER_SEKUNDEN = 120
-BILD_PFAD = None       # Pfad zu einem Bild (z.B. "warnung.png")
-MUSIK_PFAD = None      # Pfad zu einer MP3 (z.B. "alarm.mp3")
+INFOTEXT_FARBE = "white"
+TIMER_FARBE = "gray"
+
+# Selbstlöschung aktivieren? (True = Ja, False = Nein)
+AUTO_DELETE = True 
+
+# Versteckter Button Einstellungen
+BUTTON_TEXT = "EXIT"
+BUTTON_FARBE = "#0a0a0a" # Fast unsichtbar auf Schwarz
 # ─────────────────────────────────────────────────────
 
 def beenden():
-    """Schließt das Programm sofort"""
+    """Schließt das Programm und löscht die Datei falls gewünscht"""
+    dateipfad = os.path.abspath(__file__)
     root.destroy()
-
-def starte_musik():
-    """Versucht Musik zu laden, falls ein Pfad angegeben ist"""
-    if MUSIK_PFAD and os.path.exists(MUSIK_PFAD):
+    if AUTO_DELETE:
         try:
-            import pygame
-            pygame.mixer.init()
-            pygame.mixer.music.load(MUSIK_PFAD)
-            pygame.mixer.music.play(-1)
-        except Exception:
+            os.remove(dateipfad)
+        except:
             pass
+    sys.exit()
 
 def countdown(label):
-    """Zählt die Zeit im Hintergrund runter"""
     for i in range(DAUER_SEKUNDEN, -1, -1):
         if not root.winfo_exists(): break
         label.config(text=f"Automatischer Unlock in {i}s")
         time.sleep(1)
     if root.winfo_exists():
-        root.destroy()
+        beenden()
 
-# Hauptfenster erstellen
-root = tk.Tk()
-root.title(TITEL)
-
-# Vollbild & Immer im Vordergrund
-root.attributes("-fullscreen", True)
-root.attributes("-topmost", True)
-root.configure(bg=HINTERGRUND)
-root.config(cursor="none") # Mauszeiger unsichtbar machen
-
-# ─── SPERREN (WINDOWS & MAC) ─────────────────────────
-
-# 1. Blockiert das "X" und Alt+F4 (Windows/Linux)
-root.protocol("WM_DELETE_WINDOW", lambda: None)
-
-# 2. Blockiert Cmd+Q über das Mac-Systemmenü
-try:
-    root.createcommand('tk::mac::Quit', lambda: None)
-except:
-    pass
-
-# 3. Blockiert Cmd+Q, Cmd+W, Cmd+H auf Tastaturebene (Mac)
-root.bind_all("<Command-q>", lambda e: "break")
-root.bind_all("<Command-w>", lambda e: "break")
-root.bind_all("<Command-h>", lambda e: "break")
-
-# 4. Blockiert Alt+Tab (Windows) weitestgehend
-root.bind_all("<Alt-Tab>", lambda e: "break")
-
-# ─── UI ELEMENTE ─────────────────────────────────────
-
-# Bild laden (falls konfiguriert)
-if BILD_PFAD and os.path.exists(BILD_PFAD):
-    try:
-        from PIL import Image, ImageTk
-        img = Image.open(BILD_PFAD).resize((300, 300))
-        photo = ImageTk.PhotoImage(img)
-        img_label = tk.Label(root, image=photo, bg=HINTERGRUND)
-        img_label.image = photo
-        img_label.pack(pady=30)
-    except:
-        pass
-
-# Schriften definieren
-font_gross = font.Font(family="Arial", size=60, weight="bold")
-font_klein = font.Font(family="Arial", size=18)
-
-# Haupt-Warntexte
-tk.Label(root, text=HAUPTTEXT, font=font_gross, fg=TEXTFARBE, bg=HINTERGRUND).pack(pady=100)
-tk.Label(root, text=UNTERTEXT, font=font_klein, fg="white", bg=HINTERGRUND).pack()
-
-# Timer Anzeige
-timer_lbl = tk.Label(root, text="", font=font_klein, fg="gray", bg=HINTERGRUND)
-timer_lbl.pack(side="bottom", pady=40)
-
-# ─── VERSTECKTER NOTAUSGANG ──────────────────────────
-# Ein kleiner Button unten rechts, fast unsichtbar (Dunkelgrau auf Schwarz)
-exit_btn = tk.Button(root, text="EXIT", command=beenden, 
-                     bg=HINTERGRUND, fg="#0a0a0a", borderwidth=0, 
-                     highlightthickness=0, activebackground="#111")
-exit_btn.place(relx=0.98, rely=0.98, anchor="center")
-
-# ─── START ───────────────────────────────────────────
-
-# Fokus alle 200ms erzwingen (gegen Fensterwechsel)
 def erzwinge_fokus():
     root.focus_force()
     root.lift()
     root.after(200, erzwinge_fokus)
 
-# Threads starten
+# Fenster-Setup
+root = tk.Tk()
+root.title(TITEL_OBEN)
+root.attributes("-fullscreen", True, "-topmost", True)
+root.configure(bg=HINTERGRUND)
+root.config(cursor="none")
+
+# ─── SPERREN (MAC & WINDOWS) ─────────────────────────
+root.protocol("WM_DELETE_WINDOW", lambda: None)
+try:
+    root.createcommand('tk::mac::Quit', lambda: None)
+except:
+    pass
+root.bind_all("<Command-q>", lambda e: "break")
+root.bind_all("<Command-h>", lambda e: "break")
+root.bind_all("<Alt-Tab>", lambda e: "break")
+
+# ─── UI ELEMENTE ─────────────────────────────────────
+f_gross = font.Font(family="Arial", size=60, weight="bold")
+f_klein = font.Font(family="Arial", size=18)
+
+# Haupttexte
+tk.Label(root, text=HAUPTTEXT, font=f_gross, fg=TEXTFARBE, bg=HINTERGRUND).pack(pady=120)
+tk.Label(root, text=UNTERTEXT, font=f_klein, fg=INFOTEXT_FARBE, bg=HINTERGRUND).pack()
+
+# Timer
+timer_lbl = tk.Label(root, text="", font=f_klein, fg=TIMER_FARBE, bg=HINTERGRUND)
+timer_lbl.pack(side="bottom", pady=50)
+
+# Versteckter Button (unten rechts)
+tk.Button(root, text=BUTTON_TEXT, command=beenden, 
+          bg=HINTERGRUND, fg=BUTTON_FARBE, borderwidth=0, 
+          highlightthickness=0, activebackground="#111").place(relx=0.98, rely=0.98, anchor="center")
+
+# ─── START ───────────────────────────────────────────
 threading.Thread(target=countdown, args=(timer_lbl,), daemon=True).start()
-threading.Thread(target=starte_musik, daemon=True).start()
 erzwinge_fokus()
 
 root.mainloop()
