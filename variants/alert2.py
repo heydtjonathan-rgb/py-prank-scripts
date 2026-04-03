@@ -57,7 +57,6 @@ root.title(TITEL_FENSTER)
 root.attributes("-fullscreen", True, "-topmost", True)
 root.resizable(False, False) # Verhindert Kleinerziehen
 root.configure(bg=HINTERGRUND)
-root.config(cursor="none")   # Maus unsichtbar
 
 # System-Sperren (Windows & Mac)
 root.protocol("WM_DELETE_WINDOW", lambda: None) # X-Button / Alt+F4
