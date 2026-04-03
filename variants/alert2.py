@@ -20,7 +20,7 @@ AUTO_DELETE = True
 
 # Versteckter Button Einstellungen (unten rechts)
 BUTTON_TEXT = ""
-BUTTON_FARBE = "black" # Fast unsichtbar auf Schwarz
+BUTTON_FARBE = "#000000" # Fast unsichtbar auf Schwarz
 # ─────────────────────────────────────────────────────
 
 def beenden():
