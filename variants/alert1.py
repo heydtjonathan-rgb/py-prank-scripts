@@ -6,20 +6,20 @@ import os
 import sys
 
 # ─── ANPASSBAR (KONFIGURATION) ───────────────────────
-DAUER_SEKUNDEN = 9999999999999       # Zeit bis zum automatischen Schließen
-TITEL_OBEN = "SYSTEM HACKED"
-HAUPTTEXT = " SYSTEM HACKED! ACCESS DENIED!"
-UNTERTEXT = "Pay 100k EUR to get your PC back!"
+DAUER_SEKUNDEN = 120       # Zeit bis zum automatischen Schließen
+TITEL_FENSTER = "SYSTEM ALERT"
+HAUPTTEXT = "ZUGRIFF VERWEIGERT"
+UNTERTEXT = "Sicherheits-Protokoll aktiv..."
 HINTERGRUND = "black"
 TEXTFARBE = "red"
 INFOTEXT_FARBE = "white"
-TIMER_FARBE = "black"
+TIMER_FARBE = "gray"
 
-# Selbstlöschung aktivieren? (True = Ja, False = Nein)
+# Selbstlöschung der Datei nach Beenden (True = Ja, False = Nein)
 AUTO_DELETE = True 
 
-# Versteckter Button Einstellungen
-BUTTON_TEXT = "PAY"
+# Versteckter Button Einstellungen (unten rechts)
+BUTTON_TEXT = "EXIT"
 BUTTON_FARBE = "#0a0a0a" # Fast unsichtbar auf Schwarz
 # ─────────────────────────────────────────────────────
 
