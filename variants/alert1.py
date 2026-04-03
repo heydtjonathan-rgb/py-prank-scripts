@@ -9,7 +9,7 @@ import sys
 DAUER_SEKUNDEN = 99999999999       # Zeit bis zum automatischen Schließen
 TITEL_FENSTER = "SYSTEM ALERT"
 HAUPTTEXT = "-ACCESS DENIED-"
-UNTERTEXT = "-!SYSTEM HACKED!---!Pay 100k EUR to get your PC back!---!SYSTEM HACKED!-"
+UNTERTEXT = "-SYSTEM HACKED---Pay 100k EUR to get your PC back---SYSTEM HACKED-"
 HINTERGRUND = "black"
 TEXTFARBE = "red"
 INFOTEXT_FARBE = "white"
