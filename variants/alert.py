@@ -8,7 +8,7 @@ import sys
 # ─── ANPASSBAR (KONFIGURATION) ───────────────────────
 DAUER_SEKUNDEN = 9999999999999       # Zeit bis zum automatischen Schließen
 TITEL_OBEN = "SYSTEM HACKED"
-HAUPTTEXT = " SYSTEM HACKED! ZUGRIFF VERWEIGERT!"
+HAUPTTEXT = " SYSTEM HACKED! ACCESS DENIED!"
 UNTERTEXT = "Pay 100k EUR to get your PC back!"
 HINTERGRUND = "black"
 TEXTFARBE = "red"
